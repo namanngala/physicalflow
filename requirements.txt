@@ -1,0 +1,7 @@
+nuscenes-devkit
+duckdb
+pandas
+numpy
+streamlit
+plotly
+watchdog
