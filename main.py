@@ -1,6 +1,7 @@
 from src.ingestion.loader import load_nuscenes
 from src.ingestion.parser import (parse_scenes, parse_samples,
                                    parse_sample_data, parse_annotations)
+from src.database.schema import create_schema
 
 nusc = load_nuscenes()
 
@@ -14,6 +15,4 @@ print(f"Samples parsed: {len(samples)}")
 print(f"Sensor records parsed: {len(sensor_data)}")
 print(f"Annotations parsed: {len(annotations)}")
 
-print(f"\nFirst scene: {scenes[0]}")
-print(f"\nFirst sensor record: {sensor_data[0]}")
-print(f"\nFirst annotation: {annotations[0]}")
+create_schema()
