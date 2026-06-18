@@ -13,3 +13,4 @@ annotations = parse_annotations(nusc)
 
 create_schema()
 load_all(scenes, samples, sensor_data, annotations)
+
