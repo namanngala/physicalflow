@@ -36,23 +36,26 @@ def check_frame_completeness():
 
     return results
 
+"""
+This is the old function - we had to change the way we calculate sync quality because the old method was not 
+accurate enough. The new method calculates the spread between the camera and lidar timestamps for each sample.
 def check_timestamp_alignment():
-    """
-    For each sample, measures spread between earliest and latest
+    
+    For each sample, measures spread between  and latest
     sensor timestamp. A wide spread means sensors fired out of sync.
     Returns a list of dicts, one per sample
-    """
+    
 
     conn = get_db_connection()
 
-    query = """
+    query = 
         SELECT
             sample_token,
             MIN(timestamp) AS min_ts,
             MAX(timestamp) AS max_ts
         FROM sensor_data
         GROUP BY sample_token
-    """
+    
 
     rows = conn.execute(query).fetchall()
     conn.close()
@@ -68,6 +71,53 @@ def check_timestamp_alignment():
         })
 
     return results
+
+"""
+
+def check_timestamp_alignment():
+    """
+    For each sample, measures the raw timestamp delta between camera 
+    and LiDAR sensor_data records.
+    
+    NOTE: This is a simplified proxy metric, not the true sync offset.
+    Camera timestamp = exposure trigger time. LiDAR timestamp = full 
+    rotation completion time. These are structurally different clock 
+    references, so this delta partially reflects LiDAR rotation timing 
+    behavior, not pure sync error. The actual nuScenes team uses a 
+    more sophisticated method (median-offset correction) to isolate 
+    true sync error, which is out of scope for this pipeline.
+    
+    Threshold is set empirically from observed data range (40-48ms)
+    rather than a theoretical physical motion calculation.
+    """
+    conn = get_db_connection()
+
+    query = """
+        SELECT
+            sample_token, 
+            MIN(timestamp) as min_ts,
+            MAX(timestamp) as max_ts,
+        FROM sensor_data
+        WHERE modality in ('camera', 'lidar')
+        GROUP BY sample_token
+    """
+
+    rows = conn.execute(query).fetchall()
+    conn.close()
+
+    results = []
+    for sample_token, min_ts, max_ts in rows:
+        sync_delta_ms = (max_ts - min_ts) / 1000
+
+        results.append({
+            'sample_token': sample_token,
+            'sync_delta_ms': sync_delta_ms,
+            "within_threshold": sync_delta_ms <= TIMESTAMP_SYNC_THRESHOLD_MS
+        })
+
+    return results
+    
+
 
 def check_annotation_validity():
     """
