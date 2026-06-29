@@ -25,6 +25,19 @@ Bad training data in physical AI isn't just an accuracy problem — it's a safet
 
 ---
 
+## Dashboard
+
+![DRS Leaderboard](docs/images/leaderboard.png)
+*All 10 scenes ranked by Data Readiness Score, with readiness bands*
+
+![Sub-Score Breakdown](docs/images/subscore_breakdown.png)
+*Per-dimension scoring for a selected scene — shows exactly why a scene scored what it scored*
+
+![Annotation Quality](docs/images/annotation.png)
+*Annotation validity and scene diversity across all scenes*
+
+---
+
 ## The Data Readiness Score (DRS)
 
 A weighted composite of 5 independently auditable dimensions:
