@@ -33,7 +33,7 @@ Bad training data in physical AI isn't just an accuracy problem — it's a safet
 ![Sub-Score Breakdown](docs/images/subscore_breakdown.png)
 *Per-dimension scoring for a selected scene — shows exactly why a scene scored what it scored*
 
-![Annotation Quality](docs/images/annotation.png)
+![Annotation Quality](docs/images/annotation_quality.png)
 *Annotation validity and scene diversity across all scenes*
 
 ---
